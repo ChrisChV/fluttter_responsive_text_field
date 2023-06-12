@@ -587,7 +587,7 @@ class _ResponsiveTextFieldState extends State<ResponsiveTextField>
         textSelectionControls = materialTextSelectionControls;
         paintCursorAboveText = false;
         cursorOpacityAnimates = false;
-        cursorColor ??= themeData.cursorColor;
+        cursorColor ??= themeData.textSelectionTheme.cursorColor;
         break;
       case TargetPlatform.linux:
       case TargetPlatform.macOS:
@@ -612,7 +612,7 @@ class _ResponsiveTextFieldState extends State<ResponsiveTextField>
         maxLines: lines,
         minLines: widget.minLines,
         expands: false,
-        selectionColor: themeData.textSelectionColor,
+        selectionColor: themeData.textSelectionTheme.selectionColor,
         selectionControls:
             widget.selectionEnabled ? textSelectionControls : null,
         onChanged: onChanged,
@@ -664,17 +664,17 @@ class _ResponsiveTextFieldState extends State<ResponsiveTextField>
       child: IgnorePointer(
         ignoring: !(widget.enabled ?? widget.decoration?.enabled ?? true),
         child: TextSelectionGestureDetector(
-          onTapDown: _handleTapDown,
+          onTapDown: _handleTapDown as GestureTapDragDownCallback,
           onForcePressStart:
               forcePressEnabled ? _handleForcePressStarted : null,
-          onSingleTapUp: _handleSingleTapUp,
+          onSingleTapUp: _handleSingleTapUp as GestureTapDragUpCallback,
           onSingleTapCancel: _handleSingleTapCancel,
           onSingleLongTapStart: _handleSingleLongTapStart,
           onSingleLongTapMoveUpdate: _handleSingleLongTapMoveUpdate,
           onSingleLongTapEnd: _handleSingleLongTapEnd,
-          onDoubleTapDown: _handleDoubleTapDown,
-          onDragSelectionStart: _handleMouseDragSelectionStart,
-          onDragSelectionUpdate: _handleMouseDragSelectionUpdate,
+          onDoubleTapDown: _handleDoubleTapDown as GestureTapDragDownCallback,
+          onDragSelectionStart: _handleMouseDragSelectionStart as GestureTapDragStartCallback,
+          onDragSelectionUpdate: _handleMouseDragSelectionUpdate as GestureTapDragUpdateCallback,
           behavior: HitTestBehavior.translucent,
           child: child,
         ),
